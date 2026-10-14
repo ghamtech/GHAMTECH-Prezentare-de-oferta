@@ -1,0 +1,298 @@
+const equipmentDefs = {
+  laptop: { label: "Laptop", price: 800, cls: "laptop" },
+  desktop: { label: "Desktop", price: 1200, cls: "desktop" },
+  server: { label: "Server", price: 3500, cls: "server" },
+  rack: { label: "Rack Server", price: 2800, cls: "rack" },
+  switch: { label: "Switch", price: 600, cls: "switch" },
+  monitor: { label: "Monitor", price: 350, cls: "monitor" },
+  printer: { label: "Imprimantă", price: 450, cls: "printer" },
+  ups: { label: "UPS", price: 500, cls: "ups" },
+  cabinet: { label: "Cabinet", price: 1500, cls: "cabinet" }
+};
+
+const idFor = (type) => `${type}-qty`;
+
+function buildEquipmentUI() {
+  const list = document.getElementById("equipment-list");
+  list.innerHTML = "";
+
+  Object.keys(equipmentDefs).forEach((key) => {
+    const def = equipmentDefs[key];
+
+    const row = document.createElement("div");
+    row.className = "equipment-item";
+
+    row.innerHTML = `
+      <div>
+        <label>${def.label}</label>
+        <div class="equipment-price">€${def.price.toLocaleString()}</div>
+      </div>
+
+      <div class="count-controls">
+        <button class="qty-btn" data-type="${key}" data-op="-">−</button>
+        <input id="${idFor(key)}" class="qty-input" type="text" value="0" readonly />
+        <button class="qty-btn" data-type="${key}" data-op="+">+</button>
+      </div>
+    `;
+
+    list.appendChild(row);
+  });
+
+  list.querySelectorAll(".qty-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const type = btn.dataset.type;
+      const op = btn.dataset.op;
+      const input = document.getElementById(idFor(type));
+      const current = Number(input.value || 0);
+
+      if (op === "+") {
+        input.value = current + 1;
+      } else {
+        input.value = Math.max(0, current - 1);
+      }
+    });
+  });
+}
+
+function createDeviceBlock(type, label) {
+  const div = document.createElement("div");
+  div.className = `device-box ${type}`;
+  div.textContent = label;
+  return div;
+}
+
+function getDims(type) {
+  const sizes = {
+    laptop: { w: 108, h: 72 },
+    desktop: { w: 96, h: 96 },
+    server: { w: 136, h: 58 },
+    rack: { w: 78, h: 190 },
+    switch: { w: 120, h: 40 },
+    monitor: { w: 110, h: 86 },
+    printer: { w: 100, h: 110 },
+    ups: { w: 88, h: 130 },
+    cabinet: { w: 96, h: 280 }
+  };
+
+  return sizes[type] || { w: 90, h: 90 };
+}
+
+function drawLine(svg, x1, y1, x2, y2) {
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  line.setAttribute("x1", x1);
+  line.setAttribute("y1", y1);
+  line.setAttribute("x2", x2);
+  line.setAttribute("y2", y2);
+  line.setAttribute("stroke", "rgba(6,95,70,0.9)");
+  line.setAttribute("stroke-width", "3");
+  line.setAttribute("stroke-linecap", "round");
+  svg.appendChild(line);
+}
+
+function renderMap(selectedItems) {
+  const canvas = document.getElementById("map-canvas");
+  const svg = document.getElementById("map-svg");
+  canvas.innerHTML = "";
+  svg.innerHTML = "";
+
+  const spaceValue = Number(document.getElementById("space-input").value || 20);
+  const width = Math.min(980, Math.max(700, spaceValue * 34));
+  const height = Math.max(420, Math.min(900, spaceValue * 23));
+
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
+  svg.setAttribute("width", width);
+  svg.setAttribute("height", height);
+
+  let x = 20;
+  let y = 20;
+
+  const placements = [];
+
+  selectedItems.forEach((item) => {
+    if (item.type === "rack" || item.type === "cabinet") return;
+
+    const size = getDims(item.type);
+
+    for (let i = 0; i < item.qty; i++) {
+      if (x + size.w + 18 > width - 220) {
+        x = 20;
+        y += size.h + 24;
+      }
+
+      const block = createDeviceBlock(item.cls, `${item.label} ${i + 1}`);
+      block.style.left = `${x}px`;
+      block.style.top = `${y}px`;
+      block.style.width = `${size.w}px`;
+      block.style.height = `${size.h}px`;
+
+      canvas.appendChild(block);
+      placements.push({
+        cx: x + size.w / 2,
+        cy: y + size.h / 2
+      });
+
+      x += size.w + 16;
+    }
+  });
+
+  const rackItem = selectedItems.find((item) => item.type === "rack");
+  const cabinetItem = selectedItems.find((item) => item.type === "cabinet");
+  const rackQty = rackItem ? rackItem.qty : 0;
+  const cabinetQty = cabinetItem ? cabinetItem.qty : 0;
+  const totalRackCount = Math.max(rackQty, cabinetQty);
+
+  if (totalRackCount > 0) {
+    const rackW = 78;
+    const rackH = Math.max(180, Math.min(340, height * 0.56));
+    const rackX = width - rackW - 26;
+    const rackY = height / 2 - rackH / 2;
+
+    const rackBlock = createDeviceBlock("rack", "Rack");
+    rackBlock.style.left = `${rackX}px`;
+    rackBlock.style.top = `${rackY}px`;
+    rackBlock.style.width = `${rackW}px`;
+    rackBlock.style.height = `${rackH}px`;
+    canvas.appendChild(rackBlock);
+
+    const rackCenter = {
+      cx: rackX + rackW / 2,
+      cy: rackY + rackH / 2
+    };
+
+    const serverItem = selectedItems.find((item) => item.type === "server");
+    if (serverItem) {
+      let serverY = rackY + 18;
+      for (let i = 0; i < serverItem.qty; i++) {
+        const size = getDims("server");
+        const sx = rackX - size.w - 18;
+        const sy = serverY;
+
+        const block = createDeviceBlock("server", `Server ${i + 1}`);
+        block.style.left = `${sx}px`;
+        block.style.top = `${sy}px`;
+        block.style.width = `${size.w}px`;
+        block.style.height = `${size.h}px`;
+
+        canvas.appendChild(block);
+        placements.push({
+          cx: sx + size.w / 2,
+          cy: sy + size.h / 2
+        });
+
+        serverY += size.h + 18;
+      }
+    }
+
+    placements.forEach((p) => {
+      drawLine(svg, p.cx, p.cy, rackCenter.cx, rackCenter.cy);
+    });
+  } else {
+    const fallbackX = width - 100;
+    const fallbackY = height / 2;
+
+    placements.forEach((p) => {
+      drawLine(svg, p.cx, p.cy, fallbackX, fallbackY);
+    });
+  }
+}
+
+function calculateAndRender() {
+  let total = 0;
+  const selected = [];
+
+  Object.keys(equipmentDefs).forEach((key) => {
+    const qty = Number(document.getElementById(idFor(key)).value || 0);
+    if (qty > 0) {
+      const price = equipmentDefs[key].price;
+      total += qty * price;
+
+      selected.push({
+        type: key,
+        qty,
+        label: equipmentDefs[key].label,
+        cls: equipmentDefs[key].cls,
+        price
+      });
+    }
+  });
+
+  const budgetSummary = document.getElementById("budget-summary");
+
+  if (!selected.length) {
+    budgetSummary.innerHTML = '<p class="muted">Selectează echipamente pentru a vedea costul total.</p>';
+    return;
+  }
+
+  let html = "";
+  selected.forEach((item) => {
+    const itemTotal = item.qty * item.price;
+    html += `
+      <div class="budget-item">
+        <div>
+          <div class="budget-item-name">${item.label}</div>
+          <div class="budget-item-qty">${item.qty} × €${item.price.toLocaleString()}</div>
+        </div>
+        <div class="budget-item-price">€${itemTotal.toLocaleString()}</div>
+      </div>
+    `;
+  });
+
+  html += `
+    <div class="total-row">
+      <span>Total</span>
+      <span>€${total.toLocaleString()}</span>
+    </div>
+  `;
+
+  budgetSummary.innerHTML = html;
+  renderMap(selected);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  buildEquipmentUI();
+
+  document.getElementById("calcBtn").addEventListener("click", calculateAndRender);
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    Object.keys(equipmentDefs).forEach((key) => {
+      document.getElementById(idFor(key)).value = 0;
+    });
+
+    document.getElementById("budget-summary").innerHTML =
+      '<p class="muted">Selectează echipamente pentru a vedea costul total.</p>';
+    document.getElementById("map-canvas").innerHTML = "";
+    document.getElementById("map-svg").innerHTML = "";
+  });
+
+  const form = document.getElementById("contactForm");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("c_name").value.trim();
+    const email = document.getElementById("c_email").value.trim();
+    const phone = document.getElementById("c_phone").value.trim();
+    const message = document.getElementById("c_message").value.trim();
+    const status = document.getElementById("contactStatus");
+
+    if (!name || !email || !phone || !message) {
+      status.textContent = "Completează toate câmpurile.";
+      status.style.color = "crimson";
+      return;
+    }
+
+    const subject = encodeURIComponent(`Solicitare consultanță - ${name}`);
+    const body = encodeURIComponent(
+      `Nume: ${name}\n` +
+      `Email: ${email}\n` +
+      `Telefon: ${phone}\n\n` +
+      `Mesaj:\n${message}`
+    );
+
+    window.location.href = `mailto:ghamtech@ghamtech.com?subject=${subject}&body=${body}`;
+
+    status.textContent = "Mesajul a fost pregătit pentru trimitere.";
+    status.style.color = "green";
+    form.reset();
+  });
+});
