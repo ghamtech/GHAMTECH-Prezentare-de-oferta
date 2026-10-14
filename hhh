@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GHAMTECH SRL | Consultanță IT & Digitalizare</title>
+  <meta name="description" content="GHAMTECH SRL oferă consultanță IT, caiete de sarcini, implementare, audit și planificare tehnică pentru proiecte de digitalizare." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="brand">
+        GHAMTECH<span>.ro</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#despre">Despre noi</a>
+        <a href="#servicii">Servicii</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#contact" class="btn btn-primary small">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="tag">Partenerul tău în digitalizare</span>
+          <h1>Transformă afacerea ta cu standarde enterprise</h1>
+          <p>
+            GHAMTECH SRL oferă consultanță IT, proiectare tehnică, implementare,
+            caiete de sarcini și audit pentru organizații care vor să crească cu
+            rigurozitate și eficiență.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Solicită o consultanță</a>
+            <a href="#calculator" class="btn btn-secondary">Vezi calculatorul</a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="floating-card card-one">
+            <span>📋</span>
+            <strong>Caiete de sarcini</strong>
+          </div>
+
+          <div class="floating-card card-two">
+            <span>⚙️</span>
+            <strong>Implementare</strong>
+          </div>
+
+          <div class="floating-card card-three">
+            <span>🛡️</span>
+            <strong>Audit UAT</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="despre">
+      <div class="container">
+        <div class="section-heading">
+          <span class="mini-label">Despre noi</span>
+          <h2>Standarde enterprise pentru firmele care vor să crească</h2>
+        </div>
+
+        <div class="two-cols">
+          <div class="info-card">
+            <div class="icon">🎯</div>
+            <h3>Misiunea noastră</h3>
+            <p>
+              Sprijinim companiile să acceseze finanțări europene și să transforme
+              digital procesele interne prin soluții IT gândite strategic, cu control,
+              conformitate și scalabilitate.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <div class="icon">⭐</div>
+            <h3>De ce ne alegi?</h3>
+            <p>
+              Aducem un nivel de rigor și disciplină de tip corporate, fără să pierdem
+              flexibilitatea necesară companiilor mici și mijlocii. Proiectele noastre
+              sunt construite pentru scalabilitate, performanță și creștere.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="services" id="servicii">
+      <div class="container">
+        <div class="section-heading">
+          <span class="mini-label">Servicii</span>
+          <h2>Solutii pentru proiecte IT complete</h2>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-card">
+            <div class="icon big">📋</div>
+            <h3>Caiete de sarcini neutre</h3>
+            <p>
+              Documentație tehnică clară, consecventă și gata pentru proceduri de
+              achiziție și finanțare.
+            </p>
+          </article>
+
+          <article class="service-card">
+            <div class="icon big">⚙️</div>
+            <h3>Consultanță & implementare</h3>
+            <p>
+              Proiectare, arhitectură, selecție echipamente și monitorizare a livrabilelor.
+            </p>
+          </article>
+
+          <article class="service-card">
+            <div class="icon big">🛡️</div>
+            <h3>Audit, UAT & raportare</h3>
+            <p>
+              Verificare, testarea funcționalităților și pregătirea dosarului final pentru decontare.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="calculator-section" id="calculator">
+      <div class="container">
+        <div class="section-heading centered">
+          <span class="mini-label">Calculator</span>
+          <h2>Calculator de costuri IT și planificare spațială</h2>
+        </div>
+
+        <div class="calculator-grid">
+          <div class="panel">
+            <h3>1. Selectează echipamente</h3>
+
+            <div class="equipment-list" id="equipment-list"></div>
+
+            <div class="space-setup">
+              <label for="space-input">Spațiu disponibil (m²)</label>
+              <input id="space-input" type="number" value="20" min="6" max="500" />
+            </div>
+
+            <div class="actions">
+              <button id="calcBtn" class="btn btn-primary">Calculează și generează hartă</button>
+              <button id="resetBtn" class="btn btn-ghost">Reset</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>2. Cost total</h3>
+            <div id="budget-summary" class="budget-summary">
+              <p class="muted">Selectează echipamente pentru a vedea costul total.</p>
+            </div>
+
+            <h3 class="map-title">3. Hartă spațială</h3>
+            <div class="map-wrapper">
+              <svg id="map-svg" class="map-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+              <div id="map-canvas" class="map-canvas"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reasons">
+      <div class="container">
+        <div class="section-heading centered">
+          <span class="mini-label">De ce GHAMTECH?</span>
+          <h2>Expertiză corporatistă pentru companii care cresc</h2>
+        </div>
+
+        <div class="reasons-grid">
+          <div class="reason-box">
+            <div class="reason-number">1</div>
+            <h3>Expertiză corporatistă</h3>
+            <p>
+              Aducem disciplinele și rigorile de la nivel enterprise în proiectele
+              companilor mici și mijlocii.
+            </p>
+          </div>
+
+          <div class="reason-box">
+            <div class="reason-number">2</div>
+            <h3>Governance și compliance</h3>
+            <p>
+              Procese, documentație și control de calitate orientate către sustenabilitate și auditabilitate.
+            </p>
+          </div>
+
+          <div class="reason-box">
+            <div class="reason-number">3</div>
+            <h3>Arhitectură scalabilă</h3>
+            <p>
+              Soluții construite pentru a crește continuu și fără refactoring fără capete de pod.
+            </p>
+          </div>
+
+          <div class="reason-box">
+            <div class="reason-number">4</div>
+            <h3>Transformare, nu doar tehnologie</h3>
+            <p>
+              Digitalizare completă, optimizare de procese și punere în ordine a infrastructurii IT.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-card">
+          <h3>Contact</h3>
+          <p>Suntem gata să evaluăm proiectul tău și să îți recomandăm cea mai bună soluție.</p>
+
+          <ul class="contact-list">
+            <li><strong>Email:</strong> ghamtech@ghamtech.com</li>
+            <li><strong>Telefon:</strong> +40 725 894 468</li>
+            <li><strong>Adresă:</strong> Prahova, România</li>
+          </ul>
+        </div>
+
+        <form id="contactForm" class="contact-form">
+          <label>
+            Nume / Companie
+            <input id="c_name" name="name" type="text" placeholder="Numele dvs. / firma" required />
+          </label>
+
+          <label>
+            Email
+            <input id="c_email" name="email" type="email" placeholder="email@dvs.ro" required />
+          </label>
+
+          <label>
+            Telefon
+            <input id="c_phone" name="phone" type="tel" placeholder="+40..." required />
+          </label>
+
+          <label>
+            Mesaj
+            <textarea id="c_message" name="message" rows="4" placeholder="Descrieți proiectul..." required></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Trimite</button>
+            <small>Va ajunge la ghamtech@ghamtech.com</small>
+          </div>
+
+          <div id="contactStatus" class="contact-status"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 GHAMTECH SRL. Toate drepturile rezervate.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
