@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GHAMTECH - Calculator & Planificare Echipe</title>
+  <meta name="description" content="Calculator costuri şi planificare spaţială echipamente IT - GHAMTECH" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container">
+      <a class="logo" href="#">GHAMTECH<span>.ro</span></a>
+      <nav>
+        <a href="#budget">Calculator</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-left">
+          <h1>Calculator costuri & planificare spațială echipamente IT</h1>
+          <p>Adaugă echipamente, calculează costul total și generează automat o hartă vizuală a amplasării în încăpere, inclusiv trasee pentru cabluri către rack și server.</p>
+          <a href="#budget" class="btn-primary">Începe acum</a>
+        </div>
+        <div class="hero-right">
+          <div class="hero-card">Enterprise standards · Design adaptiv · Vizualizare plan</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="budget" class="budget-section">
+      <div class="container budget-grid">
+        <div class="panel">
+          <h2>1. Selectează echipamente</h2>
+
+          <div class="equipment-list" id="equipment-list"></div>
+
+          <div class="controls-row">
+            <label>Spațiu disponibil (m²):</label>
+            <input id="space-input" type="number" value="20" min="6" max="500" />
+          </div>
+
+          <div class="actions">
+            <button id="calcBtn" class="btn-primary">Calculează & Generează hartă</button>
+            <button id="resetBtn" class="btn-ghost">Reset</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>2. Rezumat costuri</h2>
+          <div id="budget-summary" class="budget-summary">
+            <p class="muted">Nicio selecție — alege echipamente în stânga</p>
+          </div>
+
+          <h2 style="margin-top:24px">3. Hartă spațială</h2>
+
+          <div class="space-wrapper" id="space-wrapper">
+            <svg id="space-svg" class="space-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div id="space-canvas" class="space-canvas"></div>
+          </div>
+
+          <p class="note">Harta este orientativă și se adaptează automat în funcție de numărul dispozitivelor și spațiul disponibil.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <div class="container contact-grid">
+        <div class="contact-card">
+          <h3>Contact</h3>
+          <p>Trimite detaliile proiectului </p>
+          <ul>
+            <li>Email: <strong>ghamtech@ghamtech.com</strong></li>
+            <li>Telefon: <strong>+40 725 894 468</strong></li>
+            <li>Mesaje din formular: <strong>nicoletasenchea12@gmail.com</strong></li>
+          </ul>
+        </div>
+
+        <form id="contactForm" class="contact-form">
+          <label>Nume / Firmă<input id="c_name" name="name" required /></label>
+          <label>Email<input id="c_email" name="email" type="email" required /></label>
+          <label>Telefon<input id="c_phone" name="phone" required /></label>
+          <label>Mesaj<textarea id="c_message" name="message" rows="4" required></textarea></label>
+
+          <div class="contact-actions">
+            <button type="submit" class="btn-primary">Trimite</button>
+            <small class="muted">Va ajunge la nicoletasenchea12@gmail.com</small>
+          </div>
+          <div id="contactStatus" class="contact-status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>© GHAMTECH SRL — standard enterprise pentru companii care vor să crească</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
